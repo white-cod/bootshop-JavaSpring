@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>User Profile</h1>
+    
+    <div th:if="${success}" style="color: green;">[[${success}]]</div>
+    <div th:if="${error}" style="color: red;">[[${error}]]</div>
+
+    <form th:action="@{/user/update}" th:object="${user}" method="post">
+        <div>
+            <label>Email:</label>
+            <input type="text" th:field="*{email}" readonly />
+        </div>
+        <div>
+            <label>Full Name:</label>
+            <input type="text" th:field="*{fullName}" />
+        </div>
+        <div>
+            <label>Phone Number:</label>
+            <input type="text" th:field="*{phoneNumber}" />
+        </div>
+        <div>
+            <label>Account Created At:</label>
+            <input type="text" th:field="*{createdAt}" readonly />
+        </div>
+        <button type="submit">Update Profile</button>
+    </form>
+</body>
+</html>
