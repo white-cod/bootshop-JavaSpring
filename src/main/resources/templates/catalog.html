@@ -3,48 +3,127 @@
 <head>
     <title>BootShop - Catalog</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #ddd;
+            background-color: #f8f9fa;
+        }
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .header-icons svg {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .header-icons svg:hover {
+            transform: scale(1.1);
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
 
-        <header>
-            <div sec:authorize="isAuthenticated()">
-                Welcome, <span th:text="${#authentication.name}"></span>!
-                <form th:action="@{/logout}" method="post">
-                    <button type="submit">Logout</button>
+        <header class="d-flex justify-content-between align-items-center py-3 border-bottom">
+            <!-- Welcome and Logout Section -->
+            <div sec:authorize="isAuthenticated()" class="d-flex align-items-center">
+                <span>Welcome, <span th:text="${#authentication.name}"></span>!</span>
+                <form th:action="@{/logout}" method="post" class="ms-3">
+                    <button type="submit" class="btn p-0 border-0">
+                        <img src="/svg/logout.svg" alt="Logout" width="24" height="24">
+                    </button>
                 </form>
             </div>
-            <div sec:authorize="!isAuthenticated()">
-                <a th:href="@{/login}">Login</a>
+
+            <!-- Links for Cart and Profile as Icons -->
+            <div class="d-flex align-items-center">
+                <a th:href="@{/cart}" class="me-3">
+                    <img src="/svg/cart.svg" alt="Cart" width="24" height="24">
+                </a>
+                <a th:href="@{/user/profile}">
+                    <img src="/svg/profile.svg" alt="Profile" width="24" height="24">
+                </a>
+            </div>
+
+            <!-- Login and Register Links (When Not Authenticated) -->
+            <div sec:authorize="!isAuthenticated()" class="d-flex align-items-center">
+                <a th:href="@{/login}" class="me-3">Login</a>
                 <a th:href="@{/register}">Register</a>
             </div>
-            <div sec:authorize="isAuthenticated()">
-                <a th:href="@{/cart}" class="btn btn-outline-primary">Cart</a>
-            </div>
-            <div sec:authorize="isAuthenticated()">
-                <a th:href="@{/user/profile}" class="btn btn-outline-primary">Profile</a>
-            </div>
         </header>
+
         <h1 class="text-center">Shoe Catalog</h1>
 
-        <!-- Price Filter Section -->
         <div class="mt-4">
-            <form action="/" method="get">
-                <div class="slider-container">
-                    <label for="priceRange">Price Range:</label>
-                    <input type="range" id="priceRangeMin" name="minPrice"
-                           min="0"
-                           th:min="${minPrice}" th:max="${maxPrice}"
-                           th:value="${minPrice}">
-                    <input type="range" id="priceRangeMax" name="maxPrice"
-                           min="0"
-                           th:min="${minPrice}" th:max="${maxPrice}"
-                           th:value="${maxPrice}">
+            <form action="/" method="get" id="filterForm">
+                <!-- Price Filter Section -->
+                <div class="mb-4">
+                    <h4>Price Range</h4>
+                    <div class="slider-container">
+                        <label for="priceRange">Price Range:</label>
+                        <input type="range" id="priceRangeMin" name="minPrice"
+                            min="0"
+                            th:min="${minPrice}" th:max="${maxPrice}"
+                            th:value="${minPrice}">
+                        <input type="range" id="priceRangeMax" name="maxPrice"
+                            min="0"
+                            th:min="${minPrice}" th:max="${maxPrice}"
+                            th:value="${maxPrice}">
+                    </div>
+                    <div class="mt-2">
+                        <span>Selected Range: $<span id="minPriceDisplay" th:text="${minPrice}"></span> - $<span id="maxPriceDisplay" th:text="${maxPrice}"></span></span>
+                    </div>
                 </div>
-                <div class="mt-2">
-                    <span>Selected Range: $<span id="minPriceDisplay" th:text="${minPrice}"></span> - $<span id="maxPriceDisplay" th:text="${maxPrice}"></span></span>
+
+                <!-- Brand Filter Section -->
+                <div class="mb-4">
+                    <h4>Brands</h4>
+                    <div class="brand-filter-container">
+                        <div class="row">
+                            <div class="col-md-3" th:each="brand : ${allBrands}">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" 
+                                        th:name="brands" th:value="${brand}" 
+                                        th:id="${'brand-' + brand}"
+                                        th:checked="${selectedBrands.contains(brand)}">
+                                    <label class="form-check-label" th:for="${'brand-' + brand}" 
+                                        th:text="${brand}">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary mt-2">Filter</button>
+
+                <!-- Season Filter Section -->
+                <div class="mb-4">
+                    <h4>Seasons</h4>
+                    <div class="season-filter-container">
+                        <div class="row">
+                            <div class="col-md-3" th:each="season : ${allSeasons}">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" 
+                                        th:name="seasons" th:value="${season}" 
+                                        th:id="${'season-' + season}"
+                                        th:checked="${selectedSeasons.contains(season)}">
+                                    <label class="form-check-label" th:for="${'season-' + season}" 
+                                        th:text="${season}">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Apply Filters</button>
             </form>
         </div>
 
@@ -73,19 +152,38 @@
         <nav aria-label="Page navigation" class="mt-4">
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{/?page=${currentPage - 1}}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
+                    <a class="page-link" 
+                        th:href="@{/(page=${currentPage - 1},
+                                        minPrice=${minPrice},
+                                        maxPrice=${maxPrice},
+                                        brands=${selectedBrands},
+                                        seasons=${selectedSeasons})}" 
+                        aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
 
                 <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                     th:classappend="${i == currentPage} ? 'active'">
-                    <a class="page-link" th:href="@{|/?page=${i}|}" th:text="${i + 1}"></a>
+                   <a class="page-link" 
+                        th:href="@{/(page=${i},
+                                        minPrice=${minPrice},
+                                        maxPrice=${maxPrice},
+                                        brands=${selectedBrands},
+                                        seasons=${selectedSeasons})}" 
+                        th:text="${i + 1}">
+                    </a>
                 </li>
 
                 <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{/?page=${currentPage + 1}}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
+                    <a class="page-link" 
+                        th:href="@{/(page=${currentPage + 1},
+                                        minPrice=${minPrice},
+                                        maxPrice=${maxPrice},
+                                        brands=${selectedBrands},
+                                        seasons=${selectedSeasons})}" 
+                        aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
             </ul>
@@ -93,19 +191,35 @@
     </div>
 
     <script>
-        // JavaScript to update the displayed range values
         const minPriceInput = document.getElementById('priceRangeMin');
         const maxPriceInput = document.getElementById('priceRangeMax');
         const minPriceDisplay = document.getElementById('minPriceDisplay');
         const maxPriceDisplay = document.getElementById('maxPriceDisplay');
 
         minPriceInput.addEventListener('input', () => {
-            minPriceDisplay.textContent = minPriceInput.value;
+            const minValue = parseInt(minPriceInput.value);
+            const maxValue = parseInt(maxPriceInput.value);
+            
+            if (minValue > maxValue) {
+                minPriceInput.value = maxValue;
+                minPriceDisplay.textContent = maxValue;
+            } else {
+                minPriceDisplay.textContent = minValue;
+            }
         });
 
         maxPriceInput.addEventListener('input', () => {
-            maxPriceDisplay.textContent = maxPriceInput.value;
+            const minValue = parseInt(minPriceInput.value);
+            const maxValue = parseInt(maxPriceInput.value);
+            
+            if (maxValue < minValue) {
+                maxPriceInput.value = minValue;
+                maxPriceDisplay.textContent = minValue;
+            } else {
+                maxPriceDisplay.textContent = maxValue;
+            }
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

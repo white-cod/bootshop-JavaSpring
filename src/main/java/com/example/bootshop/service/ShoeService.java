@@ -30,7 +30,6 @@ public class ShoeService {
         return shoeRepository.findById(id).orElse(null);
     }
 
-    
     public Integer getMinPrice() {
         return shoeRepository.findMinPrice();
     }
@@ -47,8 +46,16 @@ public class ShoeService {
         return shoeRepository.findAll(pageable);
     }
 
-    public List<String> getDistinctBrandNames() {
-        return shoeRepository.findDistinctBrandNames();
+    public List<String> getAllBrands() {
+        return shoeRepository.findAllBrands();
     }
 
+    public List<String> getAllSeasons() {
+        return shoeRepository.findAllSeasons();
+    }
+
+    public Page<Shoe> getShoesPaginated(int page, int size, List<String> brands, List<String> seasons, Integer minPrice, Integer maxPrice) {
+        Pageable pageable = PageRequest.of(page, size);
+        return shoeRepository.findByFilters(brands, seasons, minPrice, maxPrice, pageable);
+    }
 }
