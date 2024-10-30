@@ -24,7 +24,7 @@ public class ShoeController {
     @GetMapping("/")
     public String showCatalog(
         @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "32") int size,
+        @RequestParam(defaultValue = "30") int size,
         @RequestParam(required = false) List<String> brands,
         @RequestParam(required = false) List<String> seasons,
         @RequestParam(required = false) Integer minPrice,

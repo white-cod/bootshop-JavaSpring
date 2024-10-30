@@ -2,192 +2,145 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>BootShop - Catalog</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid #ddd;
-            background-color: #f8f9fa;
-        }
-        .header-icons {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .header-icons svg {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        .header-icons svg:hover {
-            transform: scale(1.1);
-        }
-    </style>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/catalog.css">
 </head>
 <body>
-    <div class="container mt-5">
-
-        <header class="d-flex justify-content-between align-items-center py-3 border-bottom">
-            <!-- Welcome and Logout Section -->
-            <div sec:authorize="isAuthenticated()" class="d-flex align-items-center">
-                <span>Welcome, <span th:text="${#authentication.name}"></span>!</span>
-                <form th:action="@{/logout}" method="post" class="ms-3">
-                    <button type="submit" class="btn p-0 border-0">
-                        <img src="/svg/logout.svg" alt="Logout" width="24" height="24">
-                    </button>
-                </form>
-            </div>
-
-            <!-- Links for Cart and Profile as Icons -->
-            <div class="d-flex align-items-center">
-                <a th:href="@{/cart}" class="me-3">
-                    <img src="/svg/cart.svg" alt="Cart" width="24" height="24">
-                </a>
-                <a th:href="@{/user/profile}">
-                    <img src="/svg/profile.svg" alt="Profile" width="24" height="24">
-                </a>
-            </div>
-
-            <!-- Login and Register Links (When Not Authenticated) -->
-            <div sec:authorize="!isAuthenticated()" class="d-flex align-items-center">
-                <a th:href="@{/login}" class="me-3">Login</a>
-                <a th:href="@{/register}">Register</a>
-            </div>
-        </header>
-
-        <h1 class="text-center">Shoe Catalog</h1>
-
-        <div class="mt-4">
-            <form action="/" method="get" id="filterForm">
-                <!-- Price Filter Section -->
-                <div class="mb-4">
-                    <h4>Price Range</h4>
-                    <div class="slider-container">
-                        <label for="priceRange">Price Range:</label>
-                        <input type="range" id="priceRangeMin" name="minPrice"
-                            min="0"
-                            th:min="${minPrice}" th:max="${maxPrice}"
-                            th:value="${minPrice}">
-                        <input type="range" id="priceRangeMax" name="maxPrice"
-                            min="0"
-                            th:min="${minPrice}" th:max="${maxPrice}"
-                            th:value="${maxPrice}">
-                    </div>
-                    <div class="mt-2">
-                        <span>Selected Range: $<span id="minPriceDisplay" th:text="${minPrice}"></span> - $<span id="maxPriceDisplay" th:text="${maxPrice}"></span></span>
-                    </div>
-                </div>
-
-                <!-- Brand Filter Section -->
-                <div class="mb-4">
-                    <h4>Brands</h4>
-                    <div class="brand-filter-container">
-                        <div class="row">
-                            <div class="col-md-3" th:each="brand : ${allBrands}">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" 
-                                        th:name="brands" th:value="${brand}" 
-                                        th:id="${'brand-' + brand}"
-                                        th:checked="${selectedBrands.contains(brand)}">
-                                    <label class="form-check-label" th:for="${'brand-' + brand}" 
-                                        th:text="${brand}">
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Season Filter Section -->
-                <div class="mb-4">
-                    <h4>Seasons</h4>
-                    <div class="season-filter-container">
-                        <div class="row">
-                            <div class="col-md-3" th:each="season : ${allSeasons}">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" 
-                                        th:name="seasons" th:value="${season}" 
-                                        th:id="${'season-' + season}"
-                                        th:checked="${selectedSeasons.contains(season)}">
-                                    <label class="form-check-label" th:for="${'season-' + season}" 
-                                        th:text="${season}">
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Apply Filters</button>
+    <header>
+        <div sec:authorize="isAuthenticated()" class="user-section">
+            <span>Welcome, <span th:text="${#authentication.name}"></span>!</span>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="icon-button">
+                    <img src="/svg/logout.svg" alt="Logout">
+                </button>
             </form>
         </div>
 
-        <div class="row mt-4">
-            <div class="col-md-3" th:each="shoe : ${shoePage.content}">
-                <a th:href="@{/product/{id}(id=${shoe.id})}" class="text-decoration-none text-dark">
-                    <div class="card mb-4">
-                        <img th:src="${shoe.imageUrl1}" class="card-img-top" alt="Shoe Image">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${shoe.productName}"></h5>
-                            <p class="card-text">
-                                <strong>Brand:</strong> <span th:text="${shoe.brandName}"></span><br>
-                                <strong>Price:</strong> $<span th:text="${shoe.price}"></span><br>
-                                <strong>Sizes:</strong> <span th:text="${shoe.size1}"></span>, 
+        <nav class="nav-icons">
+            <a th:href="@{/cart}" class="icon-link">
+                <img src="/svg/cart.svg" alt="Cart">
+            </a>
+            <a th:href="@{/user/profile}" class="icon-link">
+                <img src="/svg/profile.svg" alt="Profile">
+            </a>
+        </nav>
+
+        <div sec:authorize="!isAuthenticated()" class="auth-links">
+            <a th:href="@{/login}">Login</a>
+            <a th:href="@{/register}">Register</a>
+        </div>
+    </header>
+
+    <div class="page-layout">
+        <aside class="sidebar">
+            <form action="/" method="get" id="filterForm" class="filters">
+                <div class="filter-section">
+                    <div class="price-slider">
+                        <label for="priceRange">Price Range:</label>
+                        <div class="range-inputs">
+                            <input type="range" id="priceRangeMin" name="minPrice"
+                                min="0" th:min="${minPrice}" th:max="${maxPrice}"
+                                th:value="${minPrice}">
+                            <input type="range" id="priceRangeMax" name="maxPrice"
+                                min="0" th:min="${minPrice}" th:max="${maxPrice}"
+                                th:value="${maxPrice}">
+                        </div>
+                        <div class="price-display">
+                            Selected Range: $<span id="minPriceDisplay" th:text="${minPrice}"></span> - 
+                            $<span id="maxPriceDisplay" th:text="${maxPrice}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h4>Brands</h4>
+                    <div class="checkbox-grid expandable-list">
+                        <div class="checkbox-item" th:each="brand, iterStat : ${allBrands}" 
+                            th:if="${iterStat.index < 10}">
+                            <input type="checkbox" th:name="brands" th:value="${brand}" 
+                                th:id="${'brand-' + brand}"
+                                th:checked="${selectedBrands.contains(brand)}">
+                            <label th:for="${'brand-' + brand}" th:text="${brand}"></label>
+                        </div>
+
+                        <div class="expanded-content">
+                            <div class="checkbox-item" th:each="brand, iterStat : ${allBrands}" 
+                                th:if="${iterStat.index >= 10}">
+                                <input type="checkbox" th:name="brands" th:value="${brand}" 
+                                    th:id="${'brand-' + brand}"
+                                    th:checked="${selectedBrands.contains(brand)}">
+                                <label th:for="${'brand-' + brand}" th:text="${brand}"></label>
+                            </div>
+                        </div>
+
+                        <button type="button" class="expand-button">
+                            <span class="expand-text">Show More</span>
+                            <span class="collapse-text">Show Less</span>
+                            <svg class="expand-icon" viewBox="0 0 24 24" width="16" height="16">
+                                <path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h4>Seasons</h4>
+                    <div class="checkbox-grid">
+                        <div class="checkbox-item" th:each="season : ${allSeasons}">
+                            <input type="checkbox" th:name="seasons" th:value="${season}" 
+                                th:id="${'season-' + season}"
+                                th:checked="${selectedSeasons.contains(season)}">
+                            <label th:for="${'season-' + season}" th:text="${season}"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="button">Apply Filters</button>
+            </form>
+        </aside>
+
+        <main class="main-content">
+            <div class="product-grid">
+                <div class="product-card" th:each="shoe : ${shoePage.content}">
+                    <a th:href="@{/product/{id}(id=${shoe.id})}" class="product-link">
+                        <img th:src="${shoe.imageUrl1}" alt="Shoe Image">
+                        <div class="product-info">
+                            <h5 th:text="${shoe.productName}"></h5>
+                            <p>
+                                <strong>Brand:</strong> <span th:text="${shoe.brandName}"></span>
+                                <strong>Price:</strong> $<span th:text="${shoe.price}"></span>
+                                <strong>Sizes:</strong> 
+                                <span th:text="${shoe.size1}"></span>, 
                                 <span th:text="${shoe.size2}"></span>, 
-                                <span th:text="${shoe.size3}"></span><br>
-                                <strong>Color:</strong> <span th:text="${shoe.color}"></span><br>
+                                <span th:text="${shoe.size3}"></span>
+                                <strong>Color:</strong> <span th:text="${shoe.color}"></span>
                                 <strong>Season:</strong> <span th:text="${shoe.season}"></span>
                             </p>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
             </div>
-        </div>
 
-        <nav aria-label="Page navigation" class="mt-4">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                    <a class="page-link" 
-                        th:href="@{/(page=${currentPage - 1},
-                                        minPrice=${minPrice},
-                                        maxPrice=${maxPrice},
-                                        brands=${selectedBrands},
-                                        seasons=${selectedSeasons})}" 
-                        aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
+            <nav class="pagination">
+                <a class="page-link" th:if="${currentPage > 0}"
+                    th:href="@{/(page=${currentPage - 1}, minPrice=${minPrice}, maxPrice=${maxPrice}, brands=${selectedBrands}, seasons=${selectedSeasons})}">
+                    Previous
+                </a>
 
-                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                    th:classappend="${i == currentPage} ? 'active'">
-                   <a class="page-link" 
-                        th:href="@{/(page=${i},
-                                        minPrice=${minPrice},
-                                        maxPrice=${maxPrice},
-                                        brands=${selectedBrands},
-                                        seasons=${selectedSeasons})}" 
-                        th:text="${i + 1}">
+                <div class="page-numbers">
+                    <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:href="@{/(page=${i}, minPrice=${minPrice}, maxPrice=${maxPrice}, brands=${selectedBrands}, seasons=${selectedSeasons})}"
+                        th:text="${i + 1}"
+                        th:class="${i == currentPage ? 'active' : ''}">
                     </a>
-                </li>
+                </div>
 
-                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                    <a class="page-link" 
-                        th:href="@{/(page=${currentPage + 1},
-                                        minPrice=${minPrice},
-                                        maxPrice=${maxPrice},
-                                        brands=${selectedBrands},
-                                        seasons=${selectedSeasons})}" 
-                        aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+                <a class="page-link" th:if="${currentPage < totalPages - 1}"
+                    th:href="@{/(page=${currentPage + 1}, minPrice=${minPrice}, maxPrice=${maxPrice}, brands=${selectedBrands}, seasons=${selectedSeasons})}">
+                    Next
+                </a>
+            </nav>
+        </main>
     </div>
 
     <script>
@@ -219,7 +172,19 @@
                 maxPriceDisplay.textContent = maxValue;
             }
         });
+
+        document.querySelectorAll('.expandable-list').forEach(list => {
+        const button = list.querySelector('.expand-button');
+        const expandedContent = list.querySelector('.expanded-content');
+        
+        button.addEventListener('click', () => {
+            list.classList.toggle('expanded');
+            
+            const isExpanded = list.classList.contains('expanded');
+            button.setAttribute('aria-expanded', isExpanded);
+            expandedContent.setAttribute('aria-hidden', !isExpanded);
+        });
+    });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

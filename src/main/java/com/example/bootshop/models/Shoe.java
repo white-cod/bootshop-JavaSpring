@@ -76,7 +76,7 @@ public class Shoe {
     }
 
     public int getPrice() {
-        return price;
+        return price / 100;
     }
 
     public void setPrice(int price) {
