@@ -27,7 +27,7 @@
 
         <div sec:authorize="!isAuthenticated()" class="auth-links">
             <a th:href="@{/login}">Login</a>
-            <a th:href="@{/register}">Register</a>
+            <a th:href="@{/register}">Sign Up</a>
         </div>
     </header>
 
@@ -109,11 +109,6 @@
                             <p>
                                 <strong>Brand:</strong> <span th:text="${shoe.brandName}"></span>
                                 <strong>Price:</strong> $<span th:text="${shoe.price}"></span>
-                                <strong>Sizes:</strong> 
-                                <span th:text="${shoe.size1}"></span>, 
-                                <span th:text="${shoe.size2}"></span>, 
-                                <span th:text="${shoe.size3}"></span>
-                                <strong>Color:</strong> <span th:text="${shoe.color}"></span>
                                 <strong>Season:</strong> <span th:text="${shoe.season}"></span>
                             </p>
                         </div>
