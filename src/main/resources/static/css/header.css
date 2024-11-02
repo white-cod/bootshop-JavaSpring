@@ -4,20 +4,78 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     height: 70px;
-    z-index: 1;
+    z-index: 2;
     overflow: visible;
+}
+
+.header-wrapper {
+    position: relative;
+    height: 70px;
+    overflow: visible;
+}
+
+#clouds {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    padding: 0;
+    background: #c9dbe9;
+    background: -webkit-linear-gradient(top, #c9b29f 0%, #fff 100%);
+    background: linear-gradient(top, #c9b29f 0%, #fff 100%);
+    background: -moz-linear-gradient(top, #c9b29f 0%, #fff 100%);
+    z-index: 1;
+    overflow: hidden;
+}
+
+.cloud {
+    width: 150px;
+    height: 40px;
+    background: #fff;
+    border-radius: 200px;
+    position: absolute;
+    opacity: 0.8;
+    top: 0;
+    transform: translateX(calc(100vw + var(--random-offset)));
+}
+
+.cloud:before, .cloud:after {
+    content: '';
+    position: absolute;
+    background: #fff;
+    width: 100px;
+    height: 80px;
+    top: -15px;
+    left: 10px;
+    border-radius: 100px;
+    transform: rotate(30deg);
+}
+
+.cloud:after {
+    width: 120px;
+    height: 120px;
+    top: -55px;
+    left: auto;
+    right: 15px;
 }
 
 .logo {
     position: absolute;
     top: -10px;
     left: 2rem;
-    z-index: 2;
+    z-index: 10;
     height: 80px;
     overflow: visible;
+    transition: transform 0.3s ease, rotate 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.1) rotate(3deg);
 }
 
 .logo img {
@@ -26,7 +84,7 @@ header {
     margin-top: 15%;
     margin-left: -10%;
     position: relative;
-    z-index: 2;
+    z-index: 30;
 }
 
 .header-content {
@@ -85,3 +143,134 @@ header {
 .auth-links a:hover {
     color: #FF7900;
 }
+
+.icon-link img,
+.icon-button img {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.icon-link:hover img,
+.icon-button:hover img {
+    transform: scale(1.15);
+    filter: brightness(0.8);
+}
+
+.auth-links {
+    display: flex;
+    gap: 1.5rem;
+    margin-left: 94%;
+}
+
+.auth-links a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.auth-links a:hover {
+    color: #FF7900;
+}
+
+.user-section a,
+.user-section form button {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.user-section a:hover,
+.user-section form button:hover {
+    transform: translateY(-2px);
+}
+
+@keyframes moveclouds {
+    0% { transform: translateX(100vw); }
+    100% { transform: translateX(-100vw); }
+}
+
+.x1 {
+    top: 10%;
+    left: 10vw;
+    animation: moveclouds 60s linear infinite;
+}
+
+.x2 {
+    top: 20%;
+    left: -20vw;
+    transform: translateX(calc(100vw + var(--random-offset))) scale(0.6);
+    opacity: 0.6;
+    animation: moveclouds 55s linear infinite;
+}
+
+.x3 {
+    top: 30%;
+    left: 30vw;
+    transform: translateX(calc(100vw + var(--random-offset))) scale(0.8);
+    opacity: 0.8;
+    animation: moveclouds 65s linear infinite;
+}
+
+.x4 {
+    top: 40%;
+    left: -40vw;
+    transform: translateX(calc(100vw + var(--random-offset))) scale(0.75);
+    opacity: 0.75;
+    animation: moveclouds 50s linear infinite;
+}
+
+.x5 {
+    top: 50%;
+    left: 50vw;
+    transform: translateX(calc(100vw + var(--random-offset))) scale(0.7);
+    opacity: 0.7;
+    animation: moveclouds 70s linear infinite;
+}
+
+.x6 {
+    top: 15%;
+    left: -60vw;
+    transform: translateX(calc(100vw + var(--random-offset))) scale(0.85);
+    opacity: 0.85;
+    animation: moveclouds 58s linear infinite;
+}
+
+.x7 {
+    top: 25%;
+    left: 70vw;
+    transform: translateX(calc(100vw + var(--random-offset))) scale(0.65);
+    opacity: 0.65;
+    animation: moveclouds 62s linear infinite;
+}
+
+.x8 {
+    top: 35%;
+    left: -80vw;
+    transform: translateX(calc(100vw + var(--random-offset))) scale(0.9);
+    opacity: 0.9;
+    animation: moveclouds 53s linear infinite;
+}
+
+.x9 {
+    top: 45%;
+    left: 90vw;
+    transform: translateX(calc(100vw + var(--random-offset))) scale(0.7);
+    opacity: 0.7;
+    animation: moveclouds 67s linear infinite;
+}
+
+.x10 {
+    top: 55%;
+    left: -95vw;
+    transform: translateX(calc(100vw + var(--random-offset))) scale(0.8);
+    opacity: 0.8;
+    animation: moveclouds 57s linear infinite;
+}
+
+/* Cloud rotations for variety */
+.cloud.x2:before { transform: rotate(25deg); }
+.cloud.x4:before { transform: rotate(35deg); }
+.cloud.x6:before { transform: rotate(28deg); }
+.cloud.x8:before { transform: rotate(32deg); }
+.cloud.x10:before { transform: rotate(30deg); }

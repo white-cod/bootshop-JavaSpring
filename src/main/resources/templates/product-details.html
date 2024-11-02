@@ -2,77 +2,259 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Product Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/product-details.css">
 </head>
 <body>
-<div class="container mt-5">
-    <h1 class="text-center" th:text="${shoe.productName}"></h1>
-
-    <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div th:if="${shoe.imageUrl1 != null}" class="carousel-item active">
-                <img th:src="${shoe.imageUrl1}" class="d-block w-100" alt="Product Image 1">
-            </div>
-            <div th:if="${shoe.imageUrl2 != null}" class="carousel-item">
-                <img th:src="${shoe.imageUrl2}" class="d-block w-100" alt="Product Image 2">
-            </div>
-            <div th:if="${shoe.imageUrl3 != null}" class="carousel-item">
-                <img th:src="${shoe.imageUrl3}" class="d-block w-100" alt="Product Image 3">
-            </div>
-            <div th:if="${shoe.imageUrl4 != null}" class="carousel-item">
-                <img th:src="${shoe.imageUrl4}" class="d-block w-100" alt="Product Image 4">
-            </div>
-            <div th:if="${shoe.imageUrl5 != null}" class="carousel-item">
-                <img th:src="${shoe.imageUrl5}" class="d-block w-100" alt="Product Image 5">
-            </div>
-            <div th:if="${shoe.imageUrl6 != null}" class="carousel-item">
-                <img th:src="${shoe.imageUrl6}" class="d-block w-100" alt="Product Image 6">
-            </div>
-            <div th:if="${shoe.imageUrl7 != null}" class="carousel-item">
-                <img th:src="${shoe.imageUrl7}" class="d-block w-100" alt="Product Image 7">
-            </div>
+    <div class="header-wrapper">
+        <div id="clouds">
+            <div class="cloud x1" style="--random-offset: 0px"></div>
+            <div class="cloud x2" style="--random-offset: 0px"></div>
+            <div class="cloud x3" style="--random-offset: 0px"></div>
+            <div class="cloud x4" style="--random-offset: 0px"></div>
+            <div class="cloud x5" style="--random-offset: 0px"></div>
+            <div class="cloud x6" style="--random-offset: 0px"></div>
+            <div class="cloud x7" style="--random-offset: 0px"></div>
+            <div class="cloud x8" style="--random-offset: 0px"></div>
+            <div class="cloud x9" style="--random-offset: 0px"></div>
+            <div class="cloud x10" style="--random-offset: 0px"></div>
         </div>
+        
+        <header>
+            <div class="logo">
+                <a th:href="@{/}">
+                    <img src="/img/logo.png" alt="Home Logo">
+                </a>
+            </div>
 
-        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <h2>Product Information</h2>
-            <p><strong>Brand:</strong> <span th:text="${shoe.brandName}"></span></p>
-            <p><strong>Price:</strong> $<span th:text="${shoe.price}"></span></p>
-            <p><strong>Sizes:</strong> 
-                <span th:text="${shoe.size1}"></span>, 
-                <span th:text="${shoe.size2}"></span>, 
-                <span th:text="${shoe.size3}"></span>
-            </p>
-            <p><strong>Color:</strong> <span th:text="${shoe.color}"></span></p>
-            <p><strong>Season:</strong> <span th:text="${shoe.season}"></span></p>
-            <p><strong>Description:</strong> <span th:text="${shoe.description}"></span></p>
-        </div>
-
-        <div class="col-md-6">
-            <div th:if="${isLoggedIn}">
-                Welcome, <span th:text="${#authentication.name}"></span>!
-                <form th:action="@{/cart/add/{id}(id=${shoe.id})}" method="post">
-                    <button type="submit" class="btn btn-primary" onclick="console.log('User Email: [[${userEmail}]]')">Add to Cart</button>
+            <div sec:authorize="isAuthenticated()" class="user-section">
+                <a th:href="@{/cart}" class="icon-link">
+                    <img src="/svg/cart.svg" alt="Cart">
+                </a>
+                <a th:href="@{/user/profile}" class="icon-link">
+                    <img src="/svg/profile.svg" alt="Profile">
+                </a>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="icon-button">
+                        <img src="/svg/logout.svg" alt="Logout">
+                    </button>
                 </form>
             </div>
 
-            <div th:if="${!isLoggedIn}">
-                <p>Please <a th:href="@{/login}">login</a> to add items to your cart.</p>
+            <div sec:authorize="!isAuthenticated()" class="auth-links">
+                <a th:href="@{/login}">Login</a>
+                <a th:href="@{/register}">Sign Up</a>
+            </div>
+        </header>
+    </div>
+
+    <main class="product-container">
+        <h1 class="product-title" th:text="${shoe.productName}"></h1>
+        
+        <div class="product-layout">
+            <div class="product-gallery">
+                <div class="carousel" id="productCarousel">
+                    <div class="carousel-container">
+                        <div th:if="${shoe.imageUrl1 != null}" class="carousel-slide active">
+                            <img th:src="${shoe.imageUrl1}" alt="Product Image 1">
+                        </div>
+                        <div th:if="${shoe.imageUrl2 != null}" class="carousel-slide">
+                            <img th:src="${shoe.imageUrl2}" alt="Product Image 2">
+                        </div>
+                        <div th:if="${shoe.imageUrl3 != null}" class="carousel-slide">
+                            <img th:src="${shoe.imageUrl3}" alt="Product Image 3">
+                        </div>
+                        <div th:if="${shoe.imageUrl4 != null}" class="carousel-slide">
+                            <img th:src="${shoe.imageUrl4}" alt="Product Image 4">
+                        </div>
+                        <div th:if="${shoe.imageUrl5 != null}" class="carousel-slide">
+                            <img th:src="${shoe.imageUrl5}" alt="Product Image 5">
+                        </div>
+                        <div th:if="${shoe.imageUrl6 != null}" class="carousel-slide">
+                            <img th:src="${shoe.imageUrl6}" alt="Product Image 6">
+                        </div>
+                        <div th:if="${shoe.imageUrl7 != null}" class="carousel-slide">
+                            <img th:src="${shoe.imageUrl7}" alt="Product Image 7">
+                        </div>
+                    </div>
+                    <button class="carousel-btn prev" id="prevBtn">←</button>
+                    <button class="carousel-btn next" id="nextBtn">→</button>
+                    <div class="carousel-dots"></div>
+                </div>
+                
+                <div class="thumbnail-nav">
+                    <div th:if="${shoe.imageUrl1 != null}" class="thumbnail active">
+                        <img th:src="${shoe.imageUrl1}" alt="Thumbnail 1">
+                    </div>
+                    <div th:if="${shoe.imageUrl2 != null}" class="thumbnail">
+                        <img th:src="${shoe.imageUrl2}" alt="Thumbnail 2">
+                    </div>
+                    <div th:if="${shoe.imageUrl3 != null}" class="thumbnail">
+                        <img th:src="${shoe.imageUrl3}" alt="Thumbnail 3">
+                    </div>
+                    <div th:if="${shoe.imageUrl4 != null}" class="thumbnail">
+                        <img th:src="${shoe.imageUrl4}" alt="Thumbnail 4">
+                    </div>
+                    <div th:if="${shoe.imageUrl5 != null}" class="thumbnail">
+                        <img th:src="${shoe.imageUrl5}" alt="Thumbnail 5">
+                    </div>
+                    <div th:if="${shoe.imageUrl6 != null}" class="thumbnail">
+                        <img th:src="${shoe.imageUrl6}" alt="Thumbnail 6">
+                    </div>
+                    <div th:if="${shoe.imageUrl7 != null}" class="thumbnail">
+                        <img th:src="${shoe.imageUrl7}" alt="Thumbnail 7">
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-details">
+                <div class="product-info">
+                    <div class="price-section">
+                        <span class="price">¥<span th:text="${shoe.price}"></span></span>
+                    </div>
+
+                    <div class="purchase-section">
+                        <div th:if="${isLoggedIn}" class="user-actions">
+                            <form th:action="@{/cart/add/{id}(id=${shoe.id})}" method="post">
+                                <button type="submit" class="add-to-cart">Add to Cart</button>
+                            </form>
+                        </div>
+
+                        <div th:if="${!isLoggedIn}" class="login-prompt">
+                            <p>Please <a th:href="@{/login}">login</a> to add items to your cart.</p>
+                        </div>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label">Brand</span>
+                            <span class="value" th:text="${shoe.brandName}"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Sizes</span>
+                            <div class="sizes">
+                                <span class="size" th:text="${shoe.size1}"></span>
+                                <span class="size" th:text="${shoe.size2}"></span>
+                                <span class="size" th:text="${shoe.size3}"></span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Color</span>
+                            <span class="value" th:text="${shoe.color}"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Season</span>
+                            <span class="value" th:text="${shoe.season}"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="description">
+                        <h3>Description</h3>
+                        <p th:text="${shoe.description}"></p>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+    </main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        const carousel = document.querySelector('.carousel-container');
+        const slides = document.querySelectorAll('.carousel-slide');
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentSlide = 0;
+
+        function updateSlides(direction = null) {
+            slides.forEach((slide, index) => {
+                slide.style.opacity = '0';
+                slide.style.transform = direction === 'next' 
+                    ? 'translateX(100%)' 
+                    : direction === 'prev' 
+                        ? 'translateX(-100%)' 
+                        : 'translateX(0)';
+                slide.classList.remove('active');
+                thumbnails[index].classList.remove('active');
+            });
+
+            slides[currentSlide].style.opacity = '1';
+            slides[currentSlide].style.transform = 'translateX(0)';
+            slides[currentSlide].classList.add('active');
+            thumbnails[currentSlide].classList.add('active');
+        }
+
+        updateSlides();
+
+        thumbnails.forEach((thumbnail, index) => {
+            thumbnail.addEventListener('click', () => {
+                const direction = index > currentSlide ? 'next' : 'prev';
+                currentSlide = index;
+                updateSlides(direction);
+            });
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            updateSlides('prev');
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateSlides('next');
+        });
+
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', () => {
+                const productSection = document.querySelector('.product-gallery');
+                productSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        const addToCartBtn = document.querySelector('.add-to-cart');
+        if (addToCartBtn) {
+            addToCartBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                addToCartBtn.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    addToCartBtn.style.transform = 'translateY(-2px)';
+                }, 150);
+
+                const successRipple = document.createElement('div');
+                successRipple.classList.add('success-ripple');
+                addToCartBtn.appendChild(successRipple);
+
+                setTimeout(() => {
+                    successRipple.remove();
+                    e.target.closest('form').submit();
+                }, 800);
+            });
+        }
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '20px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.info-item, .description, .price-section')
+            .forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                observer.observe(el);
+            });
+    });
+    </script>
 </body>
 </html>

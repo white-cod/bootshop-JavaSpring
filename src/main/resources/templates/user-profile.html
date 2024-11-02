@@ -2,31 +2,151 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>User Profile</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/user-profile.css">
 </head>
 <body>
-    <h1>User Profile</h1>
-    
-    <div th:if="${success}" style="color: green;">[[${success}]]</div>
-    <div th:if="${error}" style="color: red;">[[${error}]]</div>
+    <div class="loader-wrapper">
+        <div class="loader"></div>
+    </div>
 
-    <form th:action="@{/user/update}" th:object="${user}" method="post">
-        <div>
-            <label>Email:</label>
-            <input type="text" th:field="*{email}" readonly />
+    <div class="content-wrapper">
+        <div class="header-wrapper">
+            <div id="clouds">
+                <div class="cloud x1" style="--random-offset: 0px"></div>
+                <div class="cloud x2" style="--random-offset: 0px"></div>
+                <div class="cloud x3" style="--random-offset: 0px"></div>
+                <div class="cloud x4" style="--random-offset: 0px"></div>
+                <div class="cloud x5" style="--random-offset: 0px"></div>
+                <div class="cloud x6" style="--random-offset: 0px"></div>
+                <div class="cloud x7" style="--random-offset: 0px"></div>
+                <div class="cloud x8" style="--random-offset: 0px"></div>
+                <div class="cloud x9" style="--random-offset: 0px"></div>
+                <div class="cloud x10" style="--random-offset: 0px"></div>
+            </div>
+            
+            <header>
+                <div class="logo">
+                    <a th:href="@{/}">
+                        <img src="/img/logo.png" alt="Home Logo">
+                    </a>
+                </div>
+
+                <div sec:authorize="isAuthenticated()" class="user-section">
+                    <a th:href="@{/cart}" class="icon-link">
+                        <img src="/svg/cart.svg" alt="Cart">
+                    </a>
+                    <a th:href="@{/user/profile}" class="icon-link">
+                        <img src="/svg/profile.svg" alt="Profile">
+                    </a>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="icon-button">
+                            <img src="/svg/logout.svg" alt="Logout">
+                        </button>
+                    </form>
+                </div>
+
+                <div sec:authorize="!isAuthenticated()" class="auth-links">
+                    <a th:href="@{/login}">Login</a>
+                    <a th:href="@{/register}">Sign Up</a>
+                </div>
+            </header>
         </div>
-        <div>
-            <label>Full Name:</label>
-            <input type="text" th:field="*{fullName}" />
+
+        <div class="container">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <img src="/img/avatar.jpeg" alt="User Avatar" class="avatar" />
+                    <div>
+                        <h1>Your Profile</h1>
+                        <p>Manage your personal information</p>
+                    </div>
+                </div>
+
+                <div th:if="${success}" class="alert alert-success">[[${success}]]</div>
+                <div th:if="${error}" class="alert alert-error">[[${error}]]</div>
+
+                <form th:action="@{/user/update}" th:object="${user}" method="post">
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="text" th:field="*{email}" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Full Name:</label>
+                        <input type="text" th:field="*{fullName}" />
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number:</label>
+                        <input type="text" th:field="*{phoneNumber}" />
+                    </div>
+                    <div class="form-group">
+                        <label>Celestial since the</label>
+                        <input type="text" th:field="*{createdAt}" readonly />
+                    </div>
+                    <button type="submit">Update Profile</button>
+                </form>
+            </div>
         </div>
-        <div>
-            <label>Phone Number:</label>
-            <input type="text" th:field="*{phoneNumber}" />
-        </div>
-        <div>
-            <label>Account Created At:</label>
-            <input type="text" th:field="*{createdAt}" readonly />
-        </div>
-        <button type="submit">Update Profile</button>
-    </form>
+    </div>
+
+    <script>
+        function preloadImages() {
+            return new Promise((resolve) => {
+                const imageUrls = [
+                    '/img/user-profile-background.jpg',
+                    '/img/avatar.jpeg',
+                    '/img/logo.png'
+                ];
+
+                let loadedImages = 0;
+                const totalImages = imageUrls.length;
+
+                function imageLoaded() {
+                    loadedImages++;
+                    if (loadedImages === totalImages) {
+                        resolve();
+                    }
+                }
+
+                imageUrls.forEach(url => {
+                    const img = new Image();
+                    img.onload = imageLoaded;
+                    img.onerror = imageLoaded;
+                    img.src = url;
+                });
+
+                setTimeout(resolve, 5000);
+            });
+        }
+
+        window.addEventListener('load', function() {
+            const loader = document.querySelector('.loader-wrapper');
+            const contentWrapper = document.querySelector('.content-wrapper');
+            const profileCard = document.querySelector('.profile-card');
+            
+            contentWrapper.style.opacity = '0';
+            
+            Promise.all([
+                preloadImages(),
+                new Promise(resolve => setTimeout(resolve, 500))
+            ]).then(() => {
+                loader.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    contentWrapper.style.opacity = '1';
+                    profileCard.classList.add('show');
+
+                    const formGroups = document.querySelectorAll('.form-group');
+                    formGroups.forEach((group, index) => {
+                        setTimeout(() => {
+                            group.classList.add('animate-form-group');
+                        }, 500 + (index * 200));
+                    });
+                }, 500);
+            });
+        });
+    </script>
 </body>
 </html>

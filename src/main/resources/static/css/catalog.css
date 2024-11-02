@@ -405,3 +405,251 @@ body {
 .filter-button:hover {
   box-shadow: rgba(253, 76, 0, 0.5) 0 3px 8px;
 }
+
+/* Animations */
+.product-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                outline 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    will-change: transform, box-shadow;
+}
+
+.product-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), 
+                rgba(255, 255, 255, 0.1),
+                transparent 40%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.product-link {
+    position: relative;
+    z-index: 2;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.product-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.product-card:hover::before {
+    opacity: 1;
+}
+
+.product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.product-card:hover img {
+    transform: scale(1.08);
+}
+
+.product-info {
+    position: relative;
+    z-index: 2;
+}
+
+.checkbox-item {
+    transform-origin: left;
+    transition: background-color 0.2s ease,
+                transform 0.2s ease;
+}
+
+.checkbox-item:hover {
+    background-color: #f5f5f5;
+    transform: translateX(4px);
+}
+
+.checkbox-item input[type="checkbox"] {
+    transition: transform 0.2s ease;
+}
+
+.checkbox-item input[type="checkbox"]:checked {
+    transform: scale(1.1);
+}
+
+.range-inputs input[type="range"] {
+    transition: height 0.2s ease;
+}
+
+.range-inputs input[type="range"]:hover {
+    height: 6px;
+}
+
+.range-inputs input[type="range"]::-webkit-slider-thumb {
+    transform-origin: center;
+    transition: transform 0.2s ease,
+                background-color 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+.range-inputs input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(255, 121, 0, 0.3);
+}
+
+.expand-button {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
+}
+
+.expand-button:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+.expand-icon {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.expanded-content {
+    display: block;
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease,
+                transform 0.3s ease;
+    overflow: hidden;
+}
+
+.expandable-list.expanded .expanded-content {
+    max-height: 1000px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.filter-button {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.3s ease,
+                background-position 0.3s ease;
+    background-size: 200% auto;
+    background-image: linear-gradient(45deg, #FF7E31 0%, #E62C03 50%, #FF7E31 100%);
+    background-position: right center;
+}
+
+.filter-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(253, 76, 0, 0.3);
+    background-position: left center;
+}
+
+.filter-button:active {
+    transform: translateY(0);
+}
+
+.page-link,
+.page-numbers a {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.page-link:hover,
+.page-numbers a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.page-numbers a.active {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+}
+
+/* Animations whis start */
+
+@keyframes fadeUpIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.page-layout {
+    opacity: 0;
+    animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 0.1s;
+}
+
+.sidebar {
+    opacity: 0;
+    animation: slideInLeft 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: 0.2s;
+}
+
+.filter-section {
+    opacity: 0;
+    animation: fadeUpIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.filter-section:nth-child(1) {
+    animation-delay: 0.3s;
+}
+
+.filter-section:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.filter-section:nth-child(3) {
+    animation-delay: 0.5s;
+}
+
+.product-grid {
+    opacity: 0;
+    animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: 0.4s;
+}
+
+@for $i from 0 through 19 {
+    .product-card:nth-child(#{$i + 1}) {
+        animation-delay: #{0.2 + ($i * 0.1)}s;
+    }
+}
+
+.pagination {
+    opacity: 0;
+    animation: fadeUpIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 0.8s;
+}
