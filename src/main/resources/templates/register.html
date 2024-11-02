@@ -1,28 +1,121 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Register</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoe Haven - Register</title>
+    <link rel="stylesheet" href="/css/register.css">
 </head>
 <body>
-    <h2>Register</h2>
-    <form th:action="@{/register}" th:object="${user}" method="post">
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" th:field="*{email}" required>
+    <div class="loader-wrapper">
+        <div class="loader"></div>
+    </div>
+
+    <div class="login-container">
+        <div class="login-image-section">
+            <img src="/img/registershoe.jpeg" alt="Shoe Display" class="login-image">
         </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" th:field="*{password}" required>
+        
+        <div class="login-form-section">
+            <form th:action="@{/register}" th:object="${user}" method="post" class="login-form">
+                <h2>Create Your Account</h2>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" th:field="*{email}" required 
+                           placeholder="Enter your email" autocomplete="email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" th:field="*{password}" required 
+                           placeholder="Enter your password" autocomplete="new-password">
+                </div>
+                
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" th:field="*{fullName}" 
+                           placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number</label>
+                    <input type="text" id="phoneNumber" th:field="*{phoneNumber}" 
+                           placeholder="Enter your phone number">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="login-button">Register</button>
+                </div>
+                
+                <div class="signup-link">
+                    Already have an account? <a th:href="@{/login}">Sign In</a>
+                </div>
+
+                <div class="back-link">
+                    or
+                </div>
+
+                <div class="back-link2">
+                    <a th:href="@{/}">Back</a> to the main page
+                </div>
+            </form>
         </div>
-        <div>
-            <label for="fullName">Full Name:</label>
-            <input type="text" id="fullName" th:field="*{fullName}">
-        </div>
-        <div>
-            <label for="phoneNumber">Phone Number:</label>
-            <input type="text" id="phoneNumber" th:field="*{phoneNumber}">
-        </div>
-        <button type="submit">Register</button>
-    </form>
+    </div>
+
+    <script>
+        window.addEventListener('load', function() {
+        setTimeout(function() {
+            const loader = document.querySelector('.loader-wrapper');
+            loader.classList.add('fade-out');
+            
+            setTimeout(function() {
+                loader.style.display = 'none';
+                
+                const container = document.querySelector('.login-container');
+                const imageSection = document.querySelector('.login-image-section');
+                const formSection = document.querySelector('.login-form-section');
+                const formGroups = document.querySelectorAll('.form-group');
+                const loginButton = document.querySelector('.login-button');
+                const signupLink = document.querySelector('.signup-link');
+                const backlink = document.querySelector('.back-link');
+                const backlink2 = document.querySelector('.back-link2');
+                
+                container.classList.add('show');
+                
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        container.classList.add('animate-container');
+                        imageSection.classList.add('animate-image-section');
+                        formSection.classList.add('animate-form-section');
+                        
+                        formGroups.forEach((group, index) => {
+                            setTimeout(() => {
+                                group.classList.add('animate-form-group');
+                            }, 800 + (index * 200));
+                        });
+                        
+                        setTimeout(() => {
+                            loginButton.classList.add('animate-button');
+                        }, 1400);
+                        
+                        setTimeout(() => {
+                            signupLink.classList.add('animate-signup');
+                        }, 1600);
+
+                        setTimeout(() => {
+                            backlink.classList.add('animate-back');
+                        }, 1800);
+
+                        setTimeout(() => {
+                            backlink2.classList.add('animate-back2');
+                        }, 2000);
+                    });
+                });
+                
+            }, 500);
+        }, 500);
+    });
+    </script>
 </body>
 </html>

@@ -39,20 +39,71 @@
                 <div class="signup-link">
                     Don't have an account? <a th:href="@{/register}">Sign Up</a>
                 </div>
+
+                <div class="back-link">
+                    or
+                </div>
+
+                <div class="back-link2">
+                    <a th:href="@{/}">Back</a> to the main page
+                </div>
             </form>
         </div>
     </div>
 
     <script>
         window.addEventListener('load', function() {
+        setTimeout(function() {
+            const loader = document.querySelector('.loader-wrapper');
+            loader.classList.add('fade-out');
+            
             setTimeout(function() {
-                const loader = document.querySelector('.loader-wrapper');
-                loader.classList.add('fade-out');
-                setTimeout(function() {
-                    loader.style.display = 'none';
-                }, 500);
+                loader.style.display = 'none';
+                
+                const container = document.querySelector('.login-container');
+                const imageSection = document.querySelector('.login-image-section');
+                const formSection = document.querySelector('.login-form-section');
+                const formGroups = document.querySelectorAll('.form-group');
+                const loginButton = document.querySelector('.login-button');
+                const signupLink = document.querySelector('.signup-link');
+                const backlink = document.querySelector('.back-link');
+                const backlink2 = document.querySelector('.back-link2');
+                
+                container.classList.add('show');
+                
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        container.classList.add('animate-container');
+                        imageSection.classList.add('animate-image-section');
+                        formSection.classList.add('animate-form-section');
+                        
+                        formGroups.forEach((group, index) => {
+                            setTimeout(() => {
+                                group.classList.add('animate-form-group');
+                            }, 800 + (index * 200));
+                        });
+                        
+                        setTimeout(() => {
+                            loginButton.classList.add('animate-button');
+                        }, 1400);
+                        
+                        setTimeout(() => {
+                            signupLink.classList.add('animate-signup');
+                        }, 1600);
+
+                        setTimeout(() => {
+                            backlink.classList.add('animate-back');
+                        }, 1800);
+
+                        setTimeout(() => {
+                            backlink2.classList.add('animate-back2');
+                        }, 2000);
+                    });
+                });
+                
             }, 500);
-        });
+        }, 500);
+    });
     </script>
 </body>
 </html>

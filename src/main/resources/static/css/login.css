@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Calibri Light', Arial, sans-serif;
-    background: url('/img/loginbackground2.jpg') no-repeat center center fixed;
+    background: url('/img/loginbackground3.jpg') no-repeat center center fixed;
     background-size: cover;
     display: flex;
     justify-content: center;
@@ -16,13 +16,19 @@ body {
 }
 
 .login-container {
-    display: flex;
+    display: none;
     width: 90%;
     max-width: 1200px;
     background-color: white;
-    box-shadow: 0 0 336px rgba(0, 0, 0, 1.1);
+    box-shadow: 0 0 36px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.login-container.show {
+    display: flex;
 }
 
 .login-image-section {
@@ -154,6 +160,26 @@ body {
     text-decoration: none;
 }
 
+.back-link {
+    text-align: center;
+    color: #666;
+}
+
+.back-link a {
+    color: #b8860b;
+    text-decoration: none;
+}
+
+.back-link2 {
+    text-align: center;
+    color: #666;
+}
+
+.back-link2 a {
+    color: #b8860b;
+    text-decoration: none;
+}
+
 @media (max-width: 768px) {
     .login-container {
         flex-direction: column;
@@ -232,4 +258,154 @@ body::after {
     overflow: hidden;
     z-index: -1;
     content: url('/img/loginshoe.jpeg') url('/img/loginbackground2.jpg');
+}
+
+
+/* Animation classes */
+.animate-container {
+    animation: slideUp 0.8s ease-out forwards;
+}
+
+.login-image-section {
+    width: 50%;
+    position: relative;
+    background-color: #f0e8dc;
+    transform: translateX(-100%);
+    opacity: 0;
+}
+
+.animate-image-section {
+    animation: slideInLeft 0.8s ease-out 0.3s forwards;
+}
+
+.login-form-section {
+    width: 50%;
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.animate-form-section {
+    animation: slideInRight 0.8s ease-out 0.3s forwards;
+}
+
+.form-group {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.animate-form-group {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.login-button {
+    margin: 10px;
+    padding: 15px 30px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    border-radius: 10px;
+    display: block;
+    border: 0px;
+    font-weight: 700;
+    box-shadow: 0px 0px 14px -7px #f09819;
+    background-image: linear-gradient(45deg, #FF512F 0%, #F09819  51%, #FF512F  100%);
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+.animate-button {
+    animation: popIn 0.5s ease-out forwards;
+}
+
+.signup-link {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.back-link {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.back-link2 {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.animate-signup {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.animate-back {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.animate-back2 {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Keyframe Animations */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
