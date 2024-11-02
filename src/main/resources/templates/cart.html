@@ -2,88 +2,87 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>BootShop - Shopping Cart</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/cart.css">
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="alert alert-info">
-            <p>Debug Information:</p>
-            <p>User Authentication: <span th:text="${#authentication != null}">false</span></p>
-            <p th:if="${#authentication != null}">
-                User Email: <span th:text="${#authentication.name}">None</span>
-            </p>
-            <p th:if="${userId != null}">
-                User ID: <span th:text="${userId}">None</span>
-            </p>
-            <p>Cart Items Count: <span th:text="${cartItems != null ? cartItems.size() : 'null'}">0</span></p>
+    <header>
+        <div class="logo">
+            <a th:href="@{/}">
+                <img src="/img/logo.png" alt="Home Logo">
+            </a>
         </div>
 
+        <div sec:authorize="isAuthenticated()" class="user-section">
+            <a th:href="@{/cart}" class="icon-link">
+                <img src="/svg/cart.svg" alt="Cart">
+            </a>
+            <a th:href="@{/user/profile}" class="icon-link">
+                <img src="/svg/profile.svg" alt="Profile">
+            </a>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="icon-button">
+                    <img src="/svg/logout.svg" alt="Logout">
+                </button>
+            </form>
+        </div>
 
-        <header class="mb-4">
-            <div class="d-flex justify-content-between align-items-center">
-                <h1>Shopping Cart</h1>
-                <div>
-                    <a th:href="@{/}" class="btn btn-outline-primary me-2">Continue Shopping</a>
-                    <div sec:authorize="isAuthenticated()">
-                        Welcome, <span th:text="${#authentication.name}"></span>!
-                        <form th:action="@{/logout}" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-outline-danger">Logout</button>
+        <div sec:authorize="!isAuthenticated()" class="auth-links">
+            <a th:href="@{/login}">Login</a>
+            <a th:href="@{/register}">Sign Up</a>
+        </div>
+    </header>
+
+    <main class="cart-container">
+        <div class="cart-header">
+            <h1>Shopping Cart</h1>
+            <button class="continue-shopping" th:href="@{/}"><span class="text">Continue Shopping</span></button>
+        </div>
+
+        <div th:if="${cartItems == null || #lists.isEmpty(cartItems)}" class="empty-cart">
+            <h3>Your cart is empty</h3>
+            <a th:href="@{/}" class="start-shopping">Start Shopping</a>
+        </div>
+
+        <div th:if="${cartItems != null && !#lists.isEmpty(cartItems)}" class="cart-content">
+            <div class="cart-items">
+                <div class="cart-item" th:each="item : ${cartItems}">
+                    <div class="item-image">
+                        <img th:src="${item.product.imageUrl1}" alt="Product Image">
+                    </div>
+                    <div class="item-details">
+                        <h5 th:text="${item.product.productName}">Product Name</h5>
+                        <div class="product-info">
+                            <p><strong>Brand:</strong> <span th:text="${item.product.brandName}">Brand</span></p>
+                            <p><strong>Color:</strong> <span th:text="${item.product.color}">Color</span></p>
+                            <p><strong>Price:</strong> $<span th:text="${item.product.price}">0.00</span></p>
+                        </div>
+                        <div class="quantity-info">
+                            <span>Quantity: </span>
+                            <span th:text="${item.quantity}">1</span>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <h5>$<span th:text="${item.product.price * item.quantity}">0.00</span></h5>
+                        <form th:action="@{/cart/remove/{id}(id=${item.product.id})}" method="post">
+                            <button type="submit" class="remove-button">Remove</button>
                         </form>
                     </div>
                 </div>
             </div>
-        </header>
 
-        <div th:if="${cartItems == null || #lists.isEmpty(cartItems)}" class="text-center my-5">
-            <h3>Your cart is empty</h3>
-            <a th:href="@{/}" class="btn btn-primary mt-3">Start Shopping</a>
-        </div>
-
-        <div th:if="${cartItems != null && !#lists.isEmpty(cartItems)}" class="row">
-            <div class="col-md-8">
-                <div class="card mb-4" th:each="item : ${cartItems}">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-md-3">
-                                <img th:src="${item.product.imageUrl1}" class="img-fluid rounded" alt="Product Image">
-                            </div>
-                            <div class="col-md-6">
-                                <h5 class="card-title" th:text="${item.product.productName}">Product Name</h5>
-                                <p class="card-text">
-                                    <strong>Brand:</strong> <span th:text="${item.product.brandName}">Brand</span><br>
-                                    <strong>Color:</strong> <span th:text="${item.product.color}">Color</span><br>
-                                    <strong>Price:</strong> $<span th:text="${item.product.price}">0.00</span>
-                                </p>
-                                <div class="d-flex align-items-center">
-                                    <span class="me-2">Quantity:</span>
-                                    <span th:text="${item.quantity}">1</span>
-                                </div>
-                            </div>
-                            <div class="col-md-3 text-end">
-                                <h5>$<span th:text="${item.product.price * item.quantity}">0.00</span></h5>
-                                <form th:action="@{/cart/remove/{id}(id=${item.product.id})}" method="post">
-                                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                                </form>
-                            </div>
-                        </div>
+            <div class="order-summary">
+                <h5>Order Summary</h5>
+                <div class="summary-details">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <strong>$<span th:text="${total}">0.00</span></strong>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Order Summary</h5>
-                        <hr>
-                        <div class="d-flex justify-content-between mb-3">
-                            <span>Subtotal</span>
-                            <strong>$<span th:text="${total}">0.00</span></strong>
-                        </div>
-                        <button class="btn btn-primary w-100">Proceed to Checkout</button>
-                    </div>
-                </div>
+                <button class="checkout-button">Proceed to Checkout</button>
             </div>
         </div>
-    </div>
+    </main>
 </body>
 </html>
