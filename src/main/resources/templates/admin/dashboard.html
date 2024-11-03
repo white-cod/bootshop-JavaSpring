@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .shoes-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .shoes-table th, .shoes-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .shoes-table th {
+            background-color: #f4f4f4;
+        }
+        .shoes-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .shoes-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        .product-image {
+            max-width: 100px;
+            height: auto;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        .action-buttons button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .edit-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+
+        <div class="shoes-management">
+            <h2>Product Management</h2>
+            <button class="add-btn" style="margin-bottom: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer;">
+                Add New Product
+            </button>
+            
+            <div class="table-responsive">
+                <table class="shoes-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Image</th>
+                            <th>Product Name</th>
+                            <th>Brand</th>
+                            <th>Article</th>
+                            <th>Price</th>
+                            <th>Sizes</th>
+                            <th>Gender</th>
+                            <th>Color</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="shoe : ${shoes}">
+                            <td th:text="${shoe.id}"></td>
+                            <td>
+                                <img th:if="${shoe.imageUrl1}" th:src="${shoe.imageUrl1}" class="product-image" alt="Product image">
+                            </td>
+                            <td th:text="${shoe.productName}"></td>
+                            <td th:text="${shoe.brandName}"></td>
+                            <td th:text="${shoe.article}"></td>
+                            <td th:text="${shoe.price}"></td>
+                            <td>
+                                <span th:text="${shoe.size1}"></span>,
+                                <span th:text="${shoe.size2}"></span>,
+                                <span th:text="${shoe.size3}"></span>
+                            </td>
+                            <td th:text="${shoe.gender}"></td>
+                            <td th:text="${shoe.color}"></td>
+                            <td class="action-buttons">
+                                <button class="edit-btn" th:onclick="'editProduct(' + ${shoe.id} + ')'">Edit</button>
+                                <button class="delete-btn" th:onclick="'deleteProduct(' + ${shoe.id} + ')'">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function editProduct(id) {
+            console.log('Edit product:', id);
+        }
+
+        function deleteProduct(id) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                console.log('Delete product:', id);
+            }
+        }
+    </script>
+</body>
+</html>

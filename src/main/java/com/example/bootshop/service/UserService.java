@@ -17,6 +17,10 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    public boolean isAdmin(User user) {
+        return user != null && Boolean.TRUE.equals(user.getIsAdmin());
+    }
+
     public User registerUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
@@ -38,6 +42,16 @@ public class UserService {
             existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
             userRepository.save(existingUser);
         }
+    }
+
+    @Transactional
+    public User createAdminUser(String email, String password, String fullName) {
+        User adminUser = new User();
+        adminUser.setEmail(email);
+        adminUser.setPassword(passwordEncoder.encode(password));
+        adminUser.setFullName(fullName);
+        adminUser.setIsAdmin(true);
+        return userRepository.save(adminUser);
     }
 
 

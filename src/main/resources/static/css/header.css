@@ -10,6 +10,7 @@ header {
     height: 70px;
     z-index: 2;
     overflow: visible;
+    font-family: 'Calibri Light', Arial, sans-serif;
 }
 
 .header-wrapper {
@@ -268,7 +269,6 @@ header {
     animation: moveclouds 57s linear infinite;
 }
 
-/* Cloud rotations for variety */
 .cloud.x2:before { transform: rotate(25deg); }
 .cloud.x4:before { transform: rotate(35deg); }
 .cloud.x6:before { transform: rotate(28deg); }
